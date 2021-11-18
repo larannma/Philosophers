@@ -24,14 +24,14 @@ void	init_philo(t_table *table)
 	}
 }
 
-void*	routine(void* table)
+void	*routine(void *t)
 {
-	t_table t = *(t_table *) table;
+	t_table	table = *(t_table *) t;
 
-	pthread_mutex_lock(&t.mutex);
-	printf("hello from thread %d\n", t.philo[i]);
-	sleep(5);
-	pthread_mutex_unlock(&t.mutex);
+	// pthread_mutex_lock(&table.mutex);
+	printf("hello from thread %d\n", table.number_of_philosophers);
+	// sleep(5);
+	pthread_mutex_unlock(&table.mutex);
 	return (NULL);
 }
 
@@ -51,6 +51,9 @@ void	init_thread(t_table *table)
 	i = 0;
 	while (i < table->number_of_philosophers)
 	{
+		printf("i = %d   ", i);
+		table->philo[i].i = i;
+		printf("philo = %d\n", table->philo[i].i);
 		pthread_create(&thread[i], NULL, &routine, &table);
 		i++;
 	}
