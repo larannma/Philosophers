@@ -20,7 +20,7 @@ typedef struct s_table
 	int				number_of_times_each_philosopher_must_eat;
 	t_philo			*philo;
 	pthread_mutex_t	mutex;
-
+	int				remember;
 }			t_table;
 
 void	init_struct(t_table *table, char **argv, int argc);

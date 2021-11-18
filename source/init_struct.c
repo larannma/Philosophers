@@ -6,6 +6,7 @@ void	init_struct(t_table *table, char **argv, int argc)
 	table->number_of_times_each_philosopher_must_eat = ft_atoi(argv[2]);
 	table->time_to_die = ft_atoi(argv[3]);
 	table->time_to_eat = ft_atoi(argv[4]);
+	table->remember = 0;
 	if (argc == 5)
 	{
 		table->time_to_sleep = -1;
@@ -26,12 +27,14 @@ void	init_philo(t_table *table)
 
 void	*routine(void *t)
 {
-	t_table	table = *(t_table *) t;
+	t_table	*table = (t_table *) t;
+	int     i;
 
-	// pthread_mutex_lock(&table.mutex);
-	printf("hello from thread %d\n", table.number_of_philosophers);
-	// sleep(5);
-	pthread_mutex_unlock(&table.mutex);
+	i = table->remember;
+	pthread_mutex_lock(&table->mutex);
+	printf("philo number || %d\n", table->philo[i].i);
+	sleep(2);
+	pthread_mutex_unlock(&table->mutex);
 	return (NULL);
 }
 
@@ -51,10 +54,10 @@ void	init_thread(t_table *table)
 	i = 0;
 	while (i < table->number_of_philosophers)
 	{
-		printf("i = %d   ", i);
 		table->philo[i].i = i;
-		printf("philo = %d\n", table->philo[i].i);
-		pthread_create(&thread[i], NULL, &routine, &table);
+		table->remember = i;
+		printf("philo = %d remember %d\n", table->philo[i].i, table->remember);
+		pthread_create(&thread[i], NULL, &routine, table);
 		i++;
 	}
 	i = 0;
