@@ -26,9 +26,10 @@ typedef struct s_philo
 	t_table			*table;
 }			t_philo;
 
-void	init_struct(char **argv, int argc);
+int		init_struct(char **argv, int argc);
 int		init_philo(t_table *table);
 int		memfix(pthread_t **t, t_philo **p, t_table *table);
+void	forks_giveaway(t_philo *philo, t_table *table);
 
 //utills
 int		ft_atoi(const char *str);

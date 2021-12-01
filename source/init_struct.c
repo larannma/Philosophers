@@ -1,8 +1,17 @@
 #include "../include/philosophers.h"
 
-void	init_struct(char **argv, int argc)
+int	init_forks(t_table *table)
+{
+	table->mutex_forks = malloc(sizeof(pthread_mutex_t)
+			* table->number_of_philosophers);
+	if (table->mutex_forks == NULL)
+		return (1);
+	return (0);
+}
+
+int	init_struct(char **argv, int argc)
 {	
-	t_table	table;
+	t_table			table;
 
 	table.number_of_philosophers = ft_atoi(argv[1]);
 	table.number_of_times_each_philosopher_must_eat = ft_atoi(argv[2]);
@@ -14,8 +23,9 @@ void	init_struct(char **argv, int argc)
 	}
 	else
 		table.time_to_sleep = ft_atoi(argv[5]);
-	init_philo(&table);
-	
+	if (init_forks(&table) || init_philo(&table))
+		return (1);
+	return (0);
 }
 
 void	*routine(void *t)
@@ -24,7 +34,7 @@ void	*routine(void *t)
 
 	philo = (t_philo *) t;
 	pthread_mutex_lock(&philo->table->mutex);
-	printf("philo name || %zu\n", philo->name);
+	// printf("philo name || %zu\n", philo->name);
 	pthread_mutex_unlock(&philo->table->mutex);
 	return (NULL);
 }
@@ -46,6 +56,7 @@ int	init_philo(t_table *table)
 		philo[i].table = table;
 		i++;
 	}
+	forks_giveaway(philo, table);
 	i = 0;
 	while (i < table->number_of_philosophers)
 	{
