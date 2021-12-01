@@ -1,63 +1,55 @@
 #include "../include/philosophers.h"
 
-void	init_struct(t_table *table, char **argv, int argc)
+void	init_struct(char **argv, int argc)
 {	
-	table->number_of_philosophers = ft_atoi(argv[1]);
-	table->number_of_times_each_philosopher_must_eat = ft_atoi(argv[2]);
-	table->time_to_die = ft_atoi(argv[3]);
-	table->time_to_eat = ft_atoi(argv[4]);
-	table->remember = 0;
+	t_table	table;
+
+	table.number_of_philosophers = ft_atoi(argv[1]);
+	table.number_of_times_each_philosopher_must_eat = ft_atoi(argv[2]);
+	table.time_to_die = ft_atoi(argv[3]);
+	table.time_to_eat = ft_atoi(argv[4]);
 	if (argc == 5)
 	{
-		table->time_to_sleep = -1;
+		table.time_to_sleep = -1;
 	}
 	else
-		table->time_to_sleep = ft_atoi(argv[5]);
-}
-
-void	init_philo(t_table *table)
-{
-	table->philo = malloc(sizeof(t_philo) * table->number_of_philosophers);
-	if (table->philo == NULL)
-	{
-		printf("Couldn't allocate enough space\n");
-		return ;
-	}
+		table.time_to_sleep = ft_atoi(argv[5]);
+	init_philo(&table);
+	
 }
 
 void	*routine(void *t)
 {
-	t_table	*table = (t_table *) t;
-	int     i;
+	t_philo	*philo;
 
-	i = table->remember;
-	pthread_mutex_lock(&table->mutex);
-	printf("philo number || %d\n", table->philo[i].i);
-	sleep(2);
-	pthread_mutex_unlock(&table->mutex);
+	philo = (t_philo *) t;
+	pthread_mutex_lock(&philo->table->mutex);
+	printf("philo name || %zu\n", philo->name);
+	pthread_mutex_unlock(&philo->table->mutex);
 	return (NULL);
 }
 
-void	init_thread(t_table *table)
+int	init_philo(t_table *table)
 {
+	t_philo			*philo;
+	size_t			i;
 	pthread_t		*thread;
-	int				i;
 
 	pthread_mutex_init(&table->mutex, NULL);
-	thread = (pthread_t *) malloc (table->number_of_philosophers
-			* sizeof(pthread_t));
-	if (thread == NULL)
+	philo = malloc(sizeof(t_philo) * table->number_of_philosophers);
+	if (memfix(&thread, &philo, table))
+		return (1);
+	i = 0;
+	while (i < table->number_of_philosophers)
 	{
-		printf("Couldn't allocate enough space\n");
-		return ;
+		philo[i].name = i;
+		philo[i].table = table;
+		i++;
 	}
 	i = 0;
 	while (i < table->number_of_philosophers)
 	{
-		table->philo[i].i = i;
-		table->remember = i;
-		printf("philo = %d remember %d\n", table->philo[i].i, table->remember);
-		pthread_create(&thread[i], NULL, &routine, table);
+		pthread_create(&thread[i], NULL, &routine, &philo[i]);
 		i++;
 	}
 	i = 0;
@@ -67,4 +59,5 @@ void	init_thread(t_table *table)
 		i++;
 	}
 	pthread_mutex_destroy(&table->mutex);
+	return (1);
 }
