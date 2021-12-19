@@ -13,7 +13,7 @@ void	take_forks(t_philo *philo)
 	printf("%ld %ld has taken a fork\n", time_now(philo->time), philo->name + 1);
 	printf("%ld %ld is eating\n", time_now(philo->time), philo->name + 1);
 	pthread_mutex_unlock(&philo->table->mutex);
-	my_usleep(philo->table->number_of_times_each_philosopher_must_eat, \
+	my_usleep(philo->table->time_to_eat, \
 		philo->time);
 	pthread_mutex_unlock(&philo->table->mutex_forks[philo->left_fork]);
 	pthread_mutex_unlock(&philo->table->mutex_forks[philo->right_fork]);

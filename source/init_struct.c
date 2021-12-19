@@ -93,11 +93,6 @@ int	init_philo(t_table *table)
 		philo[i].last_ate = 0;
 		pthread_create(&thread[i], NULL, &routine, &philo[i]);
 	}
-	pthread_mutex_destroy(&table->mutex);
-	i = -1;
-	while (++i < table->number_of_philosophers)
-		if (pthread_mutex_destroy(&(table->mutex_forks[i])))
-			return (1);
 	monitoring(philo);
 	return (0);
 }
@@ -107,17 +102,16 @@ int	init_struct(char **argv, int argc)
 	t_table			table;
 
 	table.number_of_philosophers = ft_atoi(argv[1]);
-	table.number_of_times_each_philosopher_must_eat = ft_atoi(argv[2]);
-	table.time_to_die = ft_atoi(argv[3]);
-	table.time_to_eat = ft_atoi(argv[4]);
+	table.time_to_die = ft_atoi(argv[2]);
+	table.time_to_eat = ft_atoi(argv[3]);
+	table.time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 5)
 	{
-		table.time_to_sleep = -1;
+		table.number_of_times_each_philosopher_must_eat = -1;
 	}
 	else
-		table.time_to_sleep = ft_atoi(argv[5]);
+		table.number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
 	if (init_forks(&table) || init_philo(&table))
 		return (1);
-	
 	return (0);
 }
