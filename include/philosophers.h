@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhawk <mhawk@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/23 12:05:54 by mhawk             #+#    #+#             */
+/*   Updated: 2021/12/23 12:09:03 by mhawk            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
-# define	PHILOSOPHERS_H
+# define PHILOSOPHERS_H
 
 # include	<stdio.h>
 # include	<pthread.h>
@@ -13,7 +25,7 @@ typedef struct s_table
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				number_of_times_each_philosopher_must_eat;
+	int				must_eat;
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	*mutex_forks;
 	long long		time;

@@ -1,9 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_struct.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhawk <mhawk@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/23 12:08:33 by mhawk             #+#    #+#             */
+/*   Updated: 2021/12/23 12:23:40 by mhawk            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosophers.h"
 
-int	monitoring(t_philo *philo)
+int	monitoring(t_philo *philo, int i)
 {
-	int	i;
-
 	while (1)
 	{
 		i = -1;
@@ -17,8 +27,7 @@ int	monitoring(t_philo *philo)
 					philo[i].name + 1);
 				return (1);
 			}
-			if (philo->table->count_to_eat % \
-				(philo->table->number_of_times_each_philosopher_must_eat \
+			if (philo->table->count_to_eat % (philo->table->must_eat \
 					* philo->table->number_of_philosophers) == 0
 				&& philo->table->count_to_eat != 0)
 			{
@@ -76,7 +85,9 @@ int	init_philo(t_table *table)
 	t_philo			*philo;
 	size_t			i;
 	pthread_t		*thread;
+	int				q;
 
+	q = 1;
 	if (memfix(&thread, &philo, table))
 		return (1);
 	i = -1;
@@ -93,7 +104,7 @@ int	init_philo(t_table *table)
 		philo[i].last_ate = 0;
 		pthread_create(&thread[i], NULL, &routine, &philo[i]);
 	}
-	monitoring(philo);
+	monitoring(philo, q);
 	return (0);
 }
 
@@ -107,10 +118,13 @@ int	init_struct(char **argv, int argc)
 	table.time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 5)
 	{
-		table.number_of_times_each_philosopher_must_eat = -1;
+		table.must_eat = -1;
 	}
 	else
-		table.number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+		table.must_eat = ft_atoi(argv[5]);
+	if (table.number_of_philosophers < 1 || table.time_to_die < 1
+		|| table.must_eat < 1 || table.time_to_sleep < 1)
+		return (1);
 	if (init_forks(&table) || init_philo(&table))
 		return (1);
 	return (0);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhawk <mhawk@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/23 12:13:07 by mhawk             #+#    #+#             */
+/*   Updated: 2021/12/23 12:13:30 by mhawk            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosophers.h"
 
 static int	count(int numb, int minus, long long result)
@@ -23,7 +35,7 @@ int	ft_atoi(const char *str)
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
 		i++;
 	if (str[i] == '-')
-		 minus = -1;
+		minus = -1;
 	if (str[i] == 43 || str[i] == 45)
 		i++;
 	while (str[i] > 47 && str[i] < 58 && str[i])
